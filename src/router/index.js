@@ -8,7 +8,7 @@ import UserDashboard from "@/components/Dashboard.vue";
 
 const routes = [
   {
-    path: "/", // Landing Page
+    path: "/",
     name: "Home",
     components: {
       header: AppHeader,
@@ -17,7 +17,7 @@ const routes = [
     },
   },
   {
-    path: "/login", // Login Page
+    path: "/login",
     name: "Login",
     components: {
       header: AppHeader,
@@ -26,7 +26,7 @@ const routes = [
     },
   },
   {
-    path: "/signup", // Signup Page
+    path: "/signup",
     name: "SignUp",
     components: {
       header: AppHeader,
@@ -35,35 +35,11 @@ const routes = [
     },
   },
   {
-    path: "/features", // Features Page
-    name: "Features",
-    components: {
-      header: AppHeader,
-      default: HeroSection,
-      footer: AppFooter,
-    },
-  },
-  {
-      path: "/about",
-      name: "About",
-      //component: () => import("@/components/About.vue"), // Placeholder component
-   },
-  {
-      path: "/terms",
-      name: "Terms",
-      //component: () => import("@/components/Terms.vue"), // Placeholder component
-    },
-  {
-    path: "/dashboard", // Dashboard Page
+    path: "/dashboard",
     name: "UserDashboard",
     component: UserDashboard,
-    meta: { requiresAuth: true }, // Add meta field to require authentication
+    meta: { requiresAuth: true },
   },
-  {
-      path: "/privacy",
-      name: "Privacy",
-      //component: () => import("@/components/Privacy.vue"), // Placeholder component
-    },
 ];
 
 const router = createRouter({
@@ -71,18 +47,16 @@ const router = createRouter({
   routes,
 });
 
-// Add a global navigation guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem("token"); // Check if token exists in localStorage
-  console.log("Route requires auth:", to.meta.requiresAuth); // Log whether the route requires authentication
-  console.log("User is authenticated:", isAuthenticated); // Log if the user is authenticated
-
-  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
-    // If route requires auth and user is not authenticated
-    console.log("Redirecting to login..."); // Debugging log
-    next({ name: "Login" }); // Redirect to login page
+  const isAuthenticated = !!localStorage.getItem("token");
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // Redirect to login if trying to access a protected route
+    next({ name: "Login" });
+  } else if ((to.name === "Login" || to.name === "SignUp") && isAuthenticated) {
+    // Prevent logged-in users from accessing login/signup pages
+    next({ name: "UserDashboard" });
   } else {
-    next(); // Allow access
+    next();
   }
 });
 

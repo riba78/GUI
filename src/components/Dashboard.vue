@@ -119,12 +119,22 @@
 </template>
 
 <script>
+import { inject } from "vue";
+
 export default {
   name: "UserDashboard",
   data() {
     return {
-      companies: [], // Starts empty
+      companies: [], // Start empty
       editIndex: null,
+    };
+  },
+  setup() {
+    // Inject global state
+    const isLoggedIn = inject("isLoggedIn");
+
+    return {
+      isLoggedIn,
     };
   },
   methods: {
@@ -153,7 +163,6 @@ export default {
       this.companies.splice(index, 1); // Remove row at the given index
     },
     isRowEmpty(company) {
-      // Checks if all fields in the row are empty
       return (
         !company.name &&
         !company.address &&
@@ -164,17 +173,24 @@ export default {
       );
     },
   },
+  mounted() {
+    const isAuthenticated = !!localStorage.getItem("token");
+    if (!isAuthenticated) {
+      // Redirect to login if not authenticated
+      this.$router.push({ name: "Login" });
+    }
+  },
 };
 </script>
 
 <style scoped>
+/* Dashboard Styling */
 .user-dashboard {
   min-height: 100vh;
   background-color: #f6f9fc;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 0; /* Removed extra padding above the header */
 }
 
 .card {
@@ -205,65 +221,5 @@ export default {
 .table td {
   color: #525f7f;
   padding: 0.75rem;
-}
-
-.table tr:nth-child(even) {
-  background-color: #f8f9fa;
-}
-
-.table tr:hover {
-  background-color: #edf2f7;
-}
-
-.btn-info {
-  background-color: #11cdef;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn-info:hover {
-  background-color: #0da6cb;
-}
-
-.btn-warning {
-  background-color: #f5365c;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn-warning:hover {
-  background-color: #d6304a;
-}
-
-.btn-success {
-  background-color: #2dce89;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn-success:hover {
-  background-color: #27a97a;
-}
-
-.btn-danger {
-  background-color: #f5365c;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn-danger:hover {
-  background-color: #d6304a;
 }
 </style>
