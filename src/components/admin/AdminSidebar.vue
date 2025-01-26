@@ -2,7 +2,6 @@
   <aside class="admin-sidebar">
     <!-- Logo Section -->
     <div class="sidebar-logo">
-      <img src="@/assets/logo.png" alt="AI Receptionist Logo" class="logo" />
       <span>AI Receptionist</span>
     </div>
 
@@ -61,7 +60,7 @@ export default {
   flex-direction: column; /* Stack content vertically */
   padding: 20px;
   position: fixed; /* Fixed position relative to the viewport */
-  top: 0; /* Start from the top */
+  top: 10; /* Start from the top */
   left: 0; /* Align to the left */
 }
 
