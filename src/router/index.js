@@ -5,7 +5,10 @@ import SignUpForm from "@/pages/SignUpForm.vue";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AdminDashboard from "@/pages/AdminDashboard.vue"; // For admin users
-import UserDashboard from "@/pages/UserDashboard.vue"; // Create if needed for user dashboards
+//import UserDashboard from "@/pages/UserDashboard.vue"; // Create if needed for user dashboards
+
+// Lazy Load UserDashboard.vue
+const UserDashboard = () => import("@/pages/UserDashboard.vue");
 
 const routes = [
   {

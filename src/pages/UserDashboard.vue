@@ -1,128 +1,131 @@
 <template>
+  <!-- Main container for the admin dashboard -->
   <div class="admin-dashboard">
-    <!-- Sidebar Section -->
-    <AdminSidebar /> <!-- Sidebar imported from the components directory -->
+    
+    <!-- Sidebar Component -->
+    <side-bar :userNick="computedUserNick" :background-color="'green'" :sidebar-links="sidebarLinks" />
 
-    <!-- Main Content -->
+    <!-- Main content area -->
     <div class="main-content">
-      <!-- Dashboard Sections -->
-      <div class="dashboard-sections">
-        <!-- User Information Panel -->
-        <section>
-          <h2>User Information Panel</h2>
-          <!-- Dynamic admin details table -->
-          <table class="user-info-table">
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Admin Name</td>
-                <td>John Doe</td> <!-- Replace with dynamic data -->
-              </tr>
-              <tr>
-                <td>Last Login</td>
-                <td>2025-01-25 14:30</td> <!-- Replace with dynamic data -->
-              </tr>
-              <tr>
-                <td>Role</td>
-                <td>Super Admin</td> <!-- Replace with dynamic data -->
-              </tr>
-            </tbody>
-          </table>
-        </section>
+      <h2>Welcome, {{ computedUserNick }}!</h2>
+      <p>AI Workplace</p>
 
-        <!-- Other Sections -->
-        <section>
-          <h2>End User Management</h2>
-          <!-- Placeholder for future content -->
-        </section>
-        <section>
-          <h2>Order Management</h2>
-          <!-- Placeholder for future content -->
-        </section>
-        <section>
-          <h2>Subscription Management</h2>
-          <!-- Placeholder for future content -->
-        </section>
-        <section>
-          <h2>Content Management System</h2>
-          <!-- Placeholder for future content -->
-        </section>
-        <section>
-          <h2>Settings Panel</h2>
-          <!-- Placeholder for future content -->
-        </section>
+      <!-- Cards inside the main content -->
+      <div class="cards-container">
+        
+        <!-- First Card (AI Statistics) -->
+        <BaseCard class="dashboard-card">
+          <template #header>
+            <h4 class="card-title">WhatsApp Receptionist</h4>
+            <h6 class="card-subtitle text-muted"></h6> <!--Last Updates-->
+          </template>
+          <template #default>
+            <p class="card-text">Get quick and friendly replies directly on WhatsApp whenever you message us!</p>
+          </template>
+          <template #footer>
+            <a href="#" class="card-link">Configure</a>
+          </template>
+        </BaseCard>
+
+        <!-- Second Card (Recent Activities) -->
+        <BaseCard class="dashboard-card">
+          <template #header>
+            <h4 class="card-title">Voice Receptionist</h4>
+            <h6 class="card-subtitle text-muted"></h6> <!--User Logs-->
+          </template>
+          <template #default>
+            <p class="card-text">Handle phone calls and inquiries any time of day, all week long.</p>
+          </template>
+          <template #footer>
+            <a href="#" class="card-link">Configure</a>
+          </template>
+        </BaseCard>
+
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import AdminSidebar from "@/components/admin/AdminSidebar.vue"; // Import Sidebar component from the components directory
+import { computed } from "vue";
+import SideBar from "@/components/SidebarPlugin/SideBar.vue";
+import BaseCard from "@/components/BaseCard.vue"; // ✅ Corrected Import Path
 
 export default {
   name: "AdminDashboard",
   components: {
-    AdminSidebar, // Register the AdminSidebar component
+    SideBar,
+    BaseCard, // ✅ Register the corrected card component
+  },
+  props: {
+    userNick: {
+      type: String,
+      default: "Guest",
+    },
+  },
+  setup(props) {
+    const computedUserNick = computed(() => localStorage.getItem("username") || props.userNick || "Guest");
+    return {
+      computedUserNick,
+    };
+  },
+  data() {
+    return {
+      sidebarLinks: [
+        { path: "/admin", name: "AI Workplace", icon: "fas fa-users" },
+        { path: "/admin/users", name: "AI Prompt", icon: "fas fa-user-cog" },
+      ],
+    };
   },
 };
 </script>
 
 <style scoped>
-/* Overall Layout */
+/* Layout */
 .admin-dashboard {
-  display: flex; /* Flexbox for sidebar and main content */
-  min-height: 100vh; /* Full viewport height */
-}
-
-/* Main Content Area */
-.main-content {
-  flex: 1; /* Occupies remaining space after sidebar */
   display: flex;
-  flex-direction: column; /* Stack sections vertically */
+  min-height: 20vh;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  background: linear-gradient(to bottom, #172b4d, #1a202c); /* Gradient background */
-}
-
-/* Dashboard Sections */
-.dashboard-sections {
-  overflow-y: auto; /* Scrollable content */
-  margin-bottom: 60px; /* Avoids footer overlap */
-}
-
-/* Section Styling */
-section {
-  margin-bottom: 40px; /* Spacing between sections */
-  background: #2dce89; /* Green background */
-  padding: 20px;
-  border-radius: 8px; /* Rounded corners */
+  background: transparent;
   color: white;
+  text-align: center;
 }
 
-/* User Information Table */
-.user-info-table {
-  width: 100%; /* Full width table */
-  border-collapse: collapse; /* Remove gaps between cells */
+/* Card Container */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.user-info-table th,
-.user-info-table td {
-  padding: 10px; /* Cell padding */
-  text-align: left; /* Left-aligned text */
-  border: 1px solid #ccc; /* Light gray borders */
+/* Card Styling */
+.dashboard-card {
+  width: 20rem;
+  background: #32325d;
+  color: black;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 15px;
 }
 
-.user-info-table th {
-  background: #172b4d; /* Darker blue for header */
-  color: white;
-}
-
-.user-info-table td {
-  background: white; /* White background for table cells */
-  color: #333; /* Dark text */
+/* Responsive */
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

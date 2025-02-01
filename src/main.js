@@ -1,10 +1,14 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router"; // Import the router
+import router from "./router";
+import DashboardPlugin from "@/components/SidebarPlugin/plugins/blackDashboard.js"; // Ensure correct path
 
-
-// Create the app and use the router
+// Create Vue app
 const app = createApp(App);
 
-app.use(router); // Register the router with the app
-app.mount("#app"); // Mount the app to the DOM
+// Use plugins
+app.use(router);
+app.use(DashboardPlugin); // Register Black Dashboard Plugin
+
+// Mount app
+app.mount("#app");
