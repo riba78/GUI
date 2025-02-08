@@ -1,11 +1,14 @@
 <template>
   <div id="app">
+    <!-- Background Effect -->
+    <BackgroundCircles />
+  
     <!-- AppHeader -->
     <header>
       <BaseNav>
         <!-- Brand Slot: Displays the app logo -->
         <template #brand>
-          <div class="logo">AI Receptionist</div>
+          <div class="logo">LingoBoo</div>
         </template>
 
         <!-- Content Header Slot: Toggles between Login and Logout buttons -->
@@ -34,12 +37,14 @@
 import { ref, provide, watch, onMounted } from "vue";
 import BaseNav from "@/components/BaseNav.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import BackgroundCircles from "@/components/BackgroundCircles.vue";
 
 export default {
   name: "App",
   components: {
     BaseNav,
     AppFooter,
+    BackgroundCircles,
   },
   setup() {
     // ✅ Reactive state to track authentication status
