@@ -16,18 +16,25 @@ export default {
 </script>
 
 <style scoped>
+/* Footer container */
 .footer {
-  background-color: transparent; /* Matches the background design */
+  background-color: transparent;
   color: white;
   text-align: center;
   padding: 20px;
   font-size: 14px;
-  position: fixed; /* Fixes the footer at the bottom */
-  bottom: 0; /* Aligns it to the bottom of the viewport */
-  width: 100%; /* Ensures it spans the full width */
-  z-index: 1; /* Keeps it above background elements */
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Center footer links */
 .footer-links {
   display: flex;
   justify-content: center;

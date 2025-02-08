@@ -2,16 +2,14 @@
   <div id="app">
     <!-- Background Effect -->
     <BackgroundCircles />
-  
+
     <!-- AppHeader -->
     <header>
       <BaseNav>
-        <!-- Brand Slot: Displays the app logo -->
         <template #brand>
           <div class="logo">LingoBoo</div>
         </template>
 
-        <!-- Content Header Slot: Toggles between Login and Logout buttons -->
         <template #content-header>
           <button v-if="!isLoggedIn" class="argon-login-button" @click="goToLogin">
             Login
@@ -49,116 +47,51 @@ export default {
   setup() {
     // ✅ Reactive state to track authentication status
     const isLoggedIn = ref(!!localStorage.getItem("token"));
-
-    // ✅ Reactive state for the logged-in user's nickname
     const userNick = ref("Guest");
 
-    // ✅ Provide authentication state & username globally to child components
+    // ✅ Provide authentication state globally
     provide("isLoggedIn", isLoggedIn);
     provide("userNick", userNick);
 
-    // ✅ Fetch the logged-in user's nickname from localStorage or API on mount
-    onMounted(async () => {
+    // ✅ Fetch username on mount
+    onMounted(() => {
       if (isLoggedIn.value) {
         userNick.value = localStorage.getItem("username") || "Guest";
       }
     });
 
-    // ✅ Watch for changes in authentication token and update username
+    // ✅ Watch for authentication state changes
     watch(
       () => localStorage.getItem("token"),
-      async (newToken) => {
+      (newToken) => {
         isLoggedIn.value = !!newToken;
-
-        // If token exists, fetch username from storage or API
-        if (isLoggedIn.value) {
-          userNick.value = localStorage.getItem("username") || "Guest";
-        } else {
-          userNick.value = "Guest"; // Reset username if logged out
-        }
+        userNick.value = newToken ? localStorage.getItem("username") || "Guest" : "Guest";
       }
     );
 
-    // ✅ Redirect user to login page
+    // ✅ Redirect to login
     const goToLogin = () => {
       window.location.href = "/login";
     };
 
-    // ✅ Logout user, clear session, and redirect to login
+    // ✅ Handle logout process
     const handleLogout = () => {
-      localStorage.removeItem("token"); // Remove JWT token
-      localStorage.removeItem("username"); // Remove stored username
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
       isLoggedIn.value = false;
-      userNick.value = "Guest"; // Reset user nickname
-      window.location.href = "/login"; // Redirect to login page
+      userNick.value = "Guest";
+      window.location.href = "/login";
     };
 
-    // ✅ Provide login/logout methods globally to child components
+    // ✅ Provide methods globally
     provide("goToLogin", goToLogin);
     provide("handleLogout", handleLogout);
 
-    return {
-      isLoggedIn,
-      userNick,
-      goToLogin,
-      handleLogout,
-    };
+    return { isLoggedIn, userNick, goToLogin, handleLogout };
   },
 };
 </script>
 
-<style>
-/* Global App Styles */
-html, body, #app {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  color: white;
-}
-
-#app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #172b4d, #1a202c);
-}
-
-main {
-  position: relative;
-  margin-top: 80px;
-  margin-bottom: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Header Styles */
-header {
-  background-color: transparent;
-  padding: 10px 20px;
-  color: white;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-/* Login/Logout Button Styles */
-.argon-login-button {
-  background-color: #5e72e4;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 15px;
-  transition: background-color 0.3s ease;
-}
-
-.argon-login-button:hover {
-  background-color: #324cdd;
-}
+<style scoped>
+/* Styles specific to App.vue */
 </style>

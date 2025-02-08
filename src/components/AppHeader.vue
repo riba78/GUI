@@ -6,23 +6,21 @@
         <div class="logo">AI Receptionist</div>
       </template>
 
-      <!-- Content Header Slot: Toggles between Login and Logout buttons -->
+      <!-- Content Header Slot: Navigation Links -->
       <template #content-header>
-        <!-- Login Button: Appears when the user is not logged in -->
-        <button
-          v-if="!isLoggedIn"
-          class="argon-login-button"
-          @click="goToLogin"
-        >
+        <nav class="nav-links">
+          <router-link to="/">Home</router-link>
+          <router-link to="/about">About</router-link>
+          <router-link to="/contact">Contact</router-link>
+        </nav>
+
+        <!-- Login Button -->
+        <button v-if="!isLoggedIn" class="argon-login-button" @click="goToLogin">
           Login
         </button>
 
-        <!-- Logout Button: Appears when the user is logged in -->
-        <button
-          v-else
-          class="argon-login-button"
-          @click="handleLogout"
-        >
+        <!-- Logout Button -->
+        <button v-else class="argon-login-button" @click="handleLogout">
           Logout
         </button>
       </template>
@@ -31,23 +29,19 @@
 </template>
 
 <script>
-import { inject } from "vue"; // Import Vue's inject function for dependency injection
-import BaseNav from "@/components/BaseNav.vue"; // Import the BaseNav component for navigation
+import { inject } from "vue";
+import BaseNav from "@/components/BaseNav.vue";
 
 export default {
-  name: "AppHeader", // Component name
+  name: "AppHeader",
   components: {
-    BaseNav, // Register the BaseNav component
+    BaseNav,
   },
   setup() {
-    /**
-     * Inject global state and methods provided by the parent component
-     */
-    const isLoggedIn = inject("isLoggedIn"); // Reactive boolean indicating login state
-    const goToLogin = inject("goToLogin"); // Method to redirect the user to the login page
-    const handleLogout = inject("handleLogout"); // Method to log the user out and redirect to login
+    const isLoggedIn = inject("isLoggedIn");
+    const goToLogin = inject("goToLogin");
+    const handleLogout = inject("handleLogout");
 
-    // Return the injected variables and methods to use in the template
     return {
       isLoggedIn,
       goToLogin,
@@ -58,44 +52,74 @@ export default {
 </script>
 
 <style scoped>
-/* Header Styling */
-
-/* Main header container styling */
+/* Header container */
 .app-header {
-  display: flex; /* Aligns children horizontally */
-  align-items: center; /* Vertically centers children */
-  justify-content: space-between; /* Pushes brand and content header to opposite sides */
-  background-color: transparent; /* Transparent background for the header */
-  padding: 15px 30px; /* Padding for spacing */
-  color: white; /* Text color */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a lifted effect */
-  position: fixed; /* Fixed positioning for consistent placement */
-  top: 0; /* Positions the header at the top */
-  width: 100%; /* Full width */
-  z-index: 10; /* Ensures the header appears above other elements */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  padding: 15px 30px;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 }
 
-/* Styling for the logo */
+/* Logo styles */
 .logo {
-  font-size: 24px; /* Font size for the logo text */
-  font-weight: bold; /* Bold font for prominence */
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* Styling for the login/logout buttons */
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+/* Header link styles */
+.nav-links a {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 4px; /* Space for underline */
+}
+
+/* Add the hover effect - a sliding underline */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Hover effect expands the underline */
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Login/Logout Button Styles */
 .argon-login-button {
-  background-color: #5e72e4; /* Primary blue background */
-  color: white; /* White text */
-  border: none; /* Removes the default border */
-  padding: 10px 20px; /* Adds padding for a clickable area */
-  font-size: 14px; /* Text size */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor for interactivity */
-  margin-left: 15px; /* Space between buttons */
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  background-color: #5e72e4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: background-color 0.3s ease;
 }
 
-/* Hover effect for the login/logout buttons */
 .argon-login-button:hover {
-  background-color: #324cdd; /* Darker blue on hover */
+  background-color: #324cdd;
 }
 </style>
